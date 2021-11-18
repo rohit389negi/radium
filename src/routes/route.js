@@ -14,9 +14,8 @@ router.get('/test-me', function (req, res) {
 
 router.post('/createAuthor',  AuthorController.createAuthor  );
 router.post('/createBook',  BookController.createBook  );
-router.get('/listBooks',  AuthorController.listBooks  );
-router.get('/twoState',  BookController.twoState  );
-router.get('/priceBook',  BookController.priceBook  );
+router.get('/listBooks',  BookController.listBooks  );
+
 
 
 module.exports = router;
