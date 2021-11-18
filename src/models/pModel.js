@@ -4,13 +4,11 @@ const ObjectId = mongoose.Schema.Types.ObjectId
 const aSchema= new mongoose.Schema({
 
     
-    author_name: String, 
-    age: Number,
-    address: String,
-    
-    
+    name: String, 
+    headQuarter: String
+       
 }, {timestamps: true} )
 
 
-module.exports = mongoose.model( 'myAuthor', aSchema ) 
+module.exports = mongoose.model( 'myPublisher', aSchema ) 
 

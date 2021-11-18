@@ -1,17 +1,23 @@
 const mongoose=require('mongoose')
+const ObjectId = mongoose.Schema.Types.ObjectId
 
 const bSchema= new mongoose.Schema({
     
     name: String,
-    author_id: {
-        type: Number,
-        required: true
-    },
+    author: {
+        type: ObjectId,
+        ref: 'myAuthor'
+        },
     price: Number,
     ratings: Number,
+    publisher: {
+        type: ObjectId,
+        ref: 'myPublisher'
+    },
+    
 
 
 }, {timestamps: true} )
 
-module.exports = mongoose.model( 'Bookk', bSchema ) 
+module.exports = mongoose.model( 'myyBook', bSchema ) 
 

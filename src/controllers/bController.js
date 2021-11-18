@@ -1,15 +1,35 @@
 const aModel = require("../models/aModel");
 const bModel = require("../models/bModel");
+const pModel = require("../models/pModel");
 const mongoose = require("mongoose");
-const { subscribe } = require("../routes/route");
 
 
 // create APIs for books
 const createNewBook = async function (req, res) {
   const book = req.body;
-  let bookCollection = await bModel.create(book);
-  res.send({bookCollection});
+  let authId = req.body.author
+  let pubId = req.body.publisher
+  let authFrmReq = await aModel.findById(authId)
+  let pubFrmReq = await pModel.findById(pubId)
+  if (authFrmReq) {
+    if (pubFrmReq) {
+    let bookCollection = await bModel.create(book);
+    res.send({book:bookCollection}) }
+    else { 
+      res.send('The publisher ID provided is not valid')
+     }
+  } else {
+    res.send('The author ID provided is not valid')
+  }
+  
 };
+
+
+const getBooks = async function (req, res) {
+  let allBooks = await bModel.find().populate('author', {"author_name":1, _id:1, "age":1});
+  res.send({ msg: allBooks });
+};
+
 
 // books written by Chetan Bhagat
 const chetanBhagatBook = async function(req, res) {
@@ -56,3 +76,4 @@ module.exports.chetanBhagatBook = chetanBhagatBook;
 module.exports.updatePrice = updatePrice;
 //module.exports.cost = cost;
 module.exports.sbooks = sbooks;
+module.exports.getBooks = getBooks;
