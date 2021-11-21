@@ -15,6 +15,28 @@ const midGlb= function (req, res, next) {
     next()    
 }
 
+app.use(midGlb)
+
+
+const firstMW= function (req, res, next) {
+
+    var currentDate = new Date();
+    var dateTime = currentDate.getDate() + " "
+                    + (currentDate.getMonth()+1) + " " 
+                    + currentDate.getFullYear() + " "  
+                    + currentDate.getHours() + ":"     
+                    + currentDate.getMinutes() + ":"   
+                    + currentDate.getSeconds();        
+
+    let ip= req.ip 
+    let url= req.originalUrl
+    console.log(`${dateTime}  ${ip}  ${url}`)
+    next()
+}
+
+app.use(firstMW)
+
+
 const mongoose = require('mongoose')
 
 mongoose.connect("mongodb+srv://users-open-to-all:hiPassword123@cluster0.uh35t.mongodb.net/pkDB?retryWrites=true&w=majority", {useNewUrlParser: true})

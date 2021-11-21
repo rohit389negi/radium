@@ -25,7 +25,7 @@ router.get('/test-me', function (req, res) {
 //     }
 //     else{
 //         res.send("Please login or register")
-//     }
+//     }nodemon
 // }
 
 router.get('/basicRoute', commonMW.mid1, commonMW.mid2, commonMW.mid3, commonMW.mid4,  UserController.basicCode  );
