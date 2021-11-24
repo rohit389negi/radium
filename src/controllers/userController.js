@@ -15,4 +15,6 @@ const createUser = async function (req, res) {
     res.send({data: userCreated})
 }
 
+
+
 module.exports.createUser = createUser
