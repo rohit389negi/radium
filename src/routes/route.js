@@ -1,17 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController')
-const productController = require('../controllers/productController')
-const orderController = require('../controllers/orderController')
-const appMiddleware = require('../middlewares/appMiddleware')
+const myuser=require('../controllers/myuserController')
+const login =require('../controllers/loginController')
+const loginmw=require('../middlewares/loginmw')
 
-router.post('/users', appMiddleware.validateAppType, userController.createUser);
-//For JWT session
-router.get('/users/:userId', userController.getDetails)
-//For JWT session
-router.post('/login', userController.login)
-router.post('/products', productController.createProduct);
-router.post('/orders', appMiddleware.validateAppType, orderController.createOrder);
-
-
+router.post('/createnewuser',  myuser.createnewUser );
+router.post('/createlogin',login.createnewlogin)
+router.get('/users/:userid',loginmw.loginmw,myuser.getuser)
+router.put('/users/:userid',loginmw.loginmw,myuser.putuser)
 module.exports = router;
+
+
