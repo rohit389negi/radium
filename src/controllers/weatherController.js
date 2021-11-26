@@ -9,8 +9,7 @@ const getWeather = async function (req, res) {
     };
     const london = await axios(options);
 
-    console.log("status:ok");
-    let city = london.data.main.temp;
+    let city = london.data
     res.status(200).send({ msg: "Successfully fetched data", data: city });
 
   }
