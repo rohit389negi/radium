@@ -1,5 +1,6 @@
 const BlogModel = require("../models/blogModel.js");
 const AuthorModel = require("../models/authorModel");
+const jwt = require("jsonwebtoken")
 
 const createBlog = async function (req, res) {
   try {
@@ -125,7 +126,24 @@ const updatedBlog = async function (req, res) {
   }
 }
 
+const login = async function (req, res) {
+  let credentials = req.body;
+  let validCredentials = await AuthorModel.findOne(credentials);
+  if (!validCredentials) {
+    res.send({ status: false, msg: "Invalid Username or Password " });
+  } else if (validCredentials.isDeleted) {
+    res.send({ status: false, msg: "User doesn't exist" });
+  } else {
+    let payload = { _id: validCredentials._id };
+    const validToken = jwt.sign(payload, "mySecretKey");
+    res.header("x-auth-token", validToken);
+    res.send({ status: true, msg: "Login Successful"});
+  }
+};
+
+
 module.exports.getBlogs = getBlogs;
 module.exports.createBlog = createBlog;
 module.exports.specificDelete = specificDelete;
 module.exports.updatedBlog = updatedBlog
+module.exports.login = login;

@@ -13,6 +13,7 @@ router.get('/blogs',  BlogController.getBlogs  );
 router.post('/blogs', BlogController.createBlog)
 router.delete('/blogs', BlogController.specificDelete)
 router.put('/updateBlog/:blogId',BlogController.updatedBlog)
+router.post('/login', BlogController.login)
 
 
 module.exports = router;
