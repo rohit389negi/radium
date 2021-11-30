@@ -9,8 +9,14 @@ const createBlog = async function (req, res) {
 
     if (authorId) {
       if (checkauthorId) {
-        let blogData = await BlogModel.create(data);
-        res.status(201).send({ status: true, data: blogData });
+        if (data.isPublished == false) {
+          let blogData = await BlogModel.create(data);
+          res.status(201).send({ status: true, data: blogData });
+        } else {
+          data.publishedAt = new Date();
+          let blogData = await BlogModel.create(data);
+          res.status(201).send({ status: true, data: blogData });
+        }
       } else {
         res.status(404).send({ msg: "No author found crossponding ID" });
       }
