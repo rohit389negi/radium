@@ -93,6 +93,39 @@ const specificDelete = async function (req, res) {
   }
 };
 
+const updatedBlog = async function (req, res) {
+  try {
+      let newData = req.body //i am taking the data in my body which i have to update
+
+      let blogId = req.params.blogId//i am providing the id from which blog i have to update
+
+      let checkingIt = await BlogModel.findOne({ _id: blogId })//i am taking the id  of blog data
+      if (checkingIt) {
+          if (checkingIt.isDeleted == false)//inside my if condition i am checking that isPublished is  false and isDeleted is false
+          {
+              if (newData.isPublished == true) {
+                  newData.publishedAt = new Date()
+                  let blogUpdated = await BlogModel.findOneAndUpdate({ _id: blogId }, newData, { upsert: true, new: true })  //$set: { title: newData.title, body: newData.body, tags: newData.tags, subcategory: newData.subcategory, isPublished: true }
+                  //i am using findOneAndUpdate and updateing the data 
+                  console.log(blogUpdated)
+                  res.status(201).send({ staus: true, msg: 'UpdatedBlog', NewBlog: blogUpdated })
+              } else {
+                  let blogUpdated = await BlogModel.findOneAndUpdate({ _id: blogId }, newData, { upsert: true, new: true })
+                  res.status(202).send({ staus: true, msg: 'UpdatedBlog', NewBlog: blogUpdated })
+              }
+          } else {
+              res.status(404).send({ staus: false, msg: "Blog dos not exist" })
+          }
+      } else {
+          res.status(404).send({ staus: false, msg: "Blog dos not exist" })
+      }
+
+  } catch (err) {
+      res.status(500).send({ msg: 'somthing went wrong' })
+  }
+}
+
 module.exports.getBlogs = getBlogs;
 module.exports.createBlog = createBlog;
 module.exports.specificDelete = specificDelete;
+module.exports.updatedBlog = updatedBlog
