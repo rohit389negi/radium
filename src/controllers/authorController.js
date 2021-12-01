@@ -1,5 +1,5 @@
 const AuthorModel = require("../models/authorModel.js")
-
+const jwt = require("jsonwebtoken")
 const createAuthor = async function (req, res) {
     try {
 
@@ -35,7 +35,7 @@ const login = async function (req, res) {
             let payload = { _id: validCredentials._id };
             let validToken = jwt.sign(payload, "mySecretKey");
             res.header("x-auth-token", validToken);
-            return res.status(200).send({ status: true, msg: "Login Successful", validCredentials });
+            return res.status(200).send({ status: true, msg: "Login Successful" });
         }
     }
     catch (err) {

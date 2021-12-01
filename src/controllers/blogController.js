@@ -1,6 +1,4 @@
 const BlogModel = require("../models/blogModel.js");
-const AuthorModel = require("../models/authorModel");
-const jwt = require("jsonwebtoken")
 
 const createBlog = async function (req, res) {
     try {
@@ -73,7 +71,7 @@ const specificDelete = async function (req, res) {
 
                 const filter = {
                     isDeleted: false,
-                    authorId: req.query.autherId
+                    authorId: req.query.authorId
                 };
                 if (req.query.category) {
                     filter["category"] = req.query.category;
@@ -91,9 +89,9 @@ const specificDelete = async function (req, res) {
 
                 let deleteData = await BlogModel.updateMany(filter, {
                     isDeleted: true,
-                    deletedAt: new Date(),
+                    deletedAt: new Date()
                 });
-                if (deleteData) {
+                if (deleteData.matchedCount > 0) {
                     return res.status(200).send({ status: true, msg: "Blog has been deleted" });
                 } else {
                     return res.status(404).send({ status: false, msg: "No such blog exist" });
@@ -120,8 +118,8 @@ const specificDelete = async function (req, res) {
                 filter["isPublished"] = req.query.isPublished;
             }
 
-            let deleteData = await BlogModel.updateMany(filter, { isDeleted: true, deletedAt: new Date(), });
-            if (deleteData.length > 0) {
+            let deleteData = await BlogModel.updateMany(filter, { isDeleted: true, deletedAt: new Date() });
+            if (deleteData.matchedCount > 0) {
                 return res.status(204).send({ status: true, msg: "Blog has been deleted" });
             } else {
                 return res.status(404).send({ status: false, msg: "No such blog exist" });
@@ -165,7 +163,7 @@ const updatedBlog = async function (req, res) {
                         let blogUpdated = await BlogModel.findOneAndUpdate({ _id: blogId }, newData, { upsert: true, new: true })  //$set: { title: newData.title, body: newData.body, tags: newData.tags, subcategory: newData.subcategory, isPublished: true }
 
 
-                        return res.status(200).send({ staus: true, msg: 'UpdatedBlog', NewBlog: blogUpdated })
+                        return res.status(200).send({ staus: true, msg: 'Blog is Updated', NewBlog: blogUpdated })
                     } else {
                         if (newData.tags && checkingIt.tags) {
                             if (typeof (newData.tags) === "object") {
