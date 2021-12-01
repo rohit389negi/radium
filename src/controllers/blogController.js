@@ -12,7 +12,7 @@ const createBlog = async function (req, res) {
 
             if (authorId === tokenAutherId) {
 
-                if (data.isPublished == false) {
+                if (!data.isPublished || data.isPublished == false) {
                     let blogData = await BlogModel.create(data);
                     return res.status(201).send({ status: true, data: blogData });
                 } else {
@@ -33,23 +33,7 @@ const createBlog = async function (req, res) {
 };
 
 
-const login = async function (req, res) {
-    try {
-        let credentials = req.body;
-        let validCredentials = await AuthorModel.findOne(credentials);
-        if (!validCredentials) {
-            return res.status(200).send({ status: false, msg: "Invalid email or Password " });
-        } else {
-            let payload = { _id: validCredentials._id };
-            let validToken = jwt.sign(payload, "mySecretKey");
-            res.header("x-auth-token", validToken);
-            return res.status(200).send({ status: true, msg: "Login Successful", validCredentials });
-        }
-    }
-    catch (err) {
-        return res.status(500).send({ staus: false, msg: "sorry, server failurereturn" })
-    }
-};
+
 const getBlogs = async function (req, res) {
     try {
         let filter = {
@@ -252,4 +236,4 @@ module.exports.getBlogs = getBlogs;
 module.exports.createBlog = createBlog;
 module.exports.specificDelete = specificDelete;
 module.exports.updatedBlog = updatedBlog
-module.exports.login = login;
+

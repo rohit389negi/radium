@@ -10,7 +10,7 @@ const Authorization = require("../middlewares/authorizationMiddleware")
 
 
 router.post('/createAuthor',  AuthorController.createAuthor  );
-router.post('/login', BlogController.login)
+router.post('/login', AuthorController.login)
 router.post('/blogs', Authorization.authorization, BlogController.createBlog)
 router.get('/blogs', Authorization.authorization, BlogController.getBlogs);
 router.put('/updateBlog/:blogId', Authorization.authorization , BlogController.updatedBlog)
