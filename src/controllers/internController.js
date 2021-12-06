@@ -61,7 +61,7 @@ const registerIntern = async function (req, res) {
             res.status(400).send({status:false, message :"Mobile is already used, try another one"})
             return
         }
-        const collegeDetails = await CollegeModel.findOne({ name: collegeName })
+        const collegeDetails = await CollegeModel.findOne({ name: collegeName, isDeleted : false })
         if (!collegeDetails) {
             res.status(404).send({ status: false, message: "No college exist with this name" })
             return
