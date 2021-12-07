@@ -1,11 +1,18 @@
 const InternModel = require('../models/internModel')
 const CollegeModel = require('../models/collegeModel')
 
-const isValid = function (value) {
+const isValid = function (value, type) {
     if (typeof value === 'undefined' || value === null) return false
     if (typeof value === 'string' && value.trim().length === 0) return false
+    if (typeof value != type) return false
     return true;
 }
+const isValidMobile = function (value, type) {
+    if (typeof value === 'undefined' || value === null) return false
+    if (typeof value != type) return false
+    return true;
+}
+
 
 //function for request body validation
 const isValidRequestBody = function (requestBody) {
@@ -23,12 +30,12 @@ const registerIntern = async function (req, res) {
         const { name, email, mobile, collegeName } = requestBody  //destructuring of object
 
         //validation starts
-        if (!isValid(name)) {
-            res.status(400).send({ status: false, message: "Name is required" })
+        if (!isValid(name, 'string')) {
+            res.status(400).send({ status: false, message: "Name is required and should be valid" })
             return
         }
-        if (!isValid(email)) {
-            res.status(400).send({ status: false, message: "email is required" })
+        if (!isValid(email, 'string')) {
+            res.status(400).send({ status: false, message: "email is required and should be valid" })
             return
         }
         //email validation using regular expression
@@ -36,8 +43,8 @@ const registerIntern = async function (req, res) {
             res.status(400).send({ status: false, message: `Email should be a valid email address` })
             return
         }
-        if (!isValid(mobile)) {
-            res.status(400).send({ status: false, message: "mobile is required" })
+        if (!isValidMobile(mobile, 'number')) {
+            res.status(400).send({ status: false, message: "mobile number is required" })
             return
         }
         //mobile number validation
@@ -45,7 +52,7 @@ const registerIntern = async function (req, res) {
             res.status(400).send({ status: false, message: `mobile should be a valid` })
             return
         }
-        if (!isValid(collegeName)) {
+        if (!isValid(collegeName, 'string')) {
             res.status(400).send({ status: false, message: "collegeName is required" })
             return
         }

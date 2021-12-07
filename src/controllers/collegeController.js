@@ -1,22 +1,24 @@
-var validUrl = require('valid-url');
+const validUrl = require('valid-url');
 const CollegeModel = require('../models/collegeModel')
 const InternModel = require('../models/internModel')
 
 
-const isValid = function (value) {
+const isValid = function (value, type) {
     if (typeof value === 'undefined' || value === null) return false
     if (typeof value === 'string' && value.trim().length === 0) return false
+    if (typeof value != type) return false
     return true;
 }
-const isValidName = function (value) {
+const isValidName = function (value, type) {
     if (typeof value === 'undefined' || value === null) return false
     if (typeof value === 'string' && (value.trim().length === 0 || value.trim().split(" ").length > 1)) return false
+    if (typeof value != type) return false
     return true;
 }
 
 //function for request body validation
 const isValidRequestBody = function (requestBody) {
-    return Object.keys(requestBody).length > 0
+    return Object.keys(requestBody).length > 0    // true or false
 }
 
 // College data entry in DB
@@ -33,15 +35,15 @@ const createCollege = async function (req, res) {
         const { name, fullName, logoLink } = reqBody
 
         //Validation starts
-        if (!isValidName(name)) {
-            res.status(400).send({ status: false, message: "Name is required or cann't contains spaces " })
+        if (!isValidName(name, 'string')) {
+            res.status(400).send({ status: false, message: "Name is required and should be valid Name" })
             return
         }
-        if (!isValid(fullName)) {
-            res.status(400).send({ status: false, message: "fullName is required " })
+        if (!isValid(fullName, 'string')) {
+            res.status(400).send({ status: false, message: "fullName is required and should be valid fullName" })
             return
         }
-        if (!isValid(logoLink)) {
+        if (!isValid(logoLink, 'string')) {
             res.status(400).send({ status: false, message: "logoLink is required " })
             return
         }
@@ -92,20 +94,20 @@ const getCollegeDetails = async function (req, res) {
 
         if (internsDetails.length == 0) {
 
-            const interests = "No one applied for internship"
-        const { fullName, logoLink } = collegeDetails
-        const data = { name, fullName, logoLink, interests }
-        return res.status(200).send({ status: true, data: data })
+            const interns = "No one applied for internship"
+            const { fullName, logoLink } = collegeDetails
+            const data = { name, fullName, logoLink, interns }
+            return res.status(200).send({ status: true, data: data })
 
         }
 
-        const interests = internsDetails
+        const interns = internsDetails
         const { fullName, logoLink } = collegeDetails
-        const data = { name, fullName, logoLink, interests }
+        const data = { name, fullName, logoLink, interns }
         return res.status(200).send({ status: true, data: data })
 
     } catch (err) {
-        
+
         return res.status(500).send({ status: false, message: err.message })
 
     }
