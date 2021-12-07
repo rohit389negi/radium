@@ -44,7 +44,7 @@ const createCollege = async function (req, res) {
             return
         }
         if (!isValid(logoLink, 'string')) {
-            res.status(400).send({ status: false, message: "logoLink is required " })
+            res.status(400).send({ status: false, message: "logoLink is required and should be valid" })
             return
         }
 
@@ -77,11 +77,11 @@ const getCollegeDetails = async function (req, res) {
     try {
         const name = req.query.collegeName
         // validation starts
-        if (!isValidName(name)) {
+        if (!isValidName(name, 'string')) {
             res.status(400).send({ status: true, message: "college name is required for college details and should be abbreviated with no spaces" })
             return
         }
-
+        name.toLowerCase()
         const collegeDetails = await CollegeModel.findOne({ name, isDeleted: false }) //using shorthand property
 
         if (!collegeDetails) {

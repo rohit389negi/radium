@@ -44,7 +44,7 @@ const registerIntern = async function (req, res) {
             return
         }
         if (!isValidMobile(mobile, 'number')) {
-            res.status(400).send({ status: false, message: "mobile number is required" })
+            res.status(400).send({ status: false, message: "mobile number is required and should be number" })
             return
         }
         //mobile number validation
@@ -53,24 +53,24 @@ const registerIntern = async function (req, res) {
             return
         }
         if (!isValid(collegeName, 'string')) {
-            res.status(400).send({ status: false, message: "collegeName is required" })
+            res.status(400).send({ status: false, message: "collegeName is required and should be valid" })
             return
         }
         //validation ends
 
         const isEmailAlreadyUsed = await InternModel.findOne({ email })
         if (isEmailAlreadyUsed) {
-            res.status(400).send({ status: false, message: "Email is already used, try different one" })
+            res.status(400).send({ status: false, message: `"${email}" is already used, try different one` })
             return
         }
         const isMobileAlreadyUsed = await InternModel.findOne({mobile})
         if (isMobileAlreadyUsed) {
-            res.status(400).send({status:false, message :"Mobile is already used, try another one"})
+            res.status(400).send({status:false, message :`"${mobile}" is already used, try another one`})
             return
         }
         const collegeDetails = await CollegeModel.findOne({ name: collegeName, isDeleted : false })
         if (!collegeDetails) {
-            res.status(404).send({ status: false, message: "No college exist with this name" })
+            res.status(404).send({ status: false, message: `No college exist by name "${collegeName}"` })
             return
         }
         const collegeId = collegeDetails["_id"]
