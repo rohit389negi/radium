@@ -132,7 +132,7 @@ const createbooks = async function (req, res) {
             .status(201)
             .send({
                 status: true,
-                message: "user created succesfully",
+                message: "book created succesfully",
                 data: savedbook,
             });
     } catch (err) {
@@ -153,17 +153,17 @@ const getbooks = async function (req, res) {
             const { userId, excerpt, category, subcategory, releasedAt } = queryPara;
 
             if (isValid(userId) && isValidObjectId(userId)) {
-                filterDel["userId"] = userId;
+                filterDel.userId = userId;
             }
-
+            
             if (isValid(category)) {
-                filterDel["category"] = category.trim();
+                filterDel.category = category.trim();
             }
-
+            
             if (isValid(subcategory)) {
-                filterDel["subcategory"] = subcategory.trim();
+                filterDel.subcategory = subcategory.trim();
             }
-
+            
             let findBooks = await BookModel.find(filterDel).select({
                 _id: 1,
                 title: 1,
@@ -173,7 +173,7 @@ const getbooks = async function (req, res) {
                 releasedAt: 1,
                 reviews: 1,
             });
-            //console.log(filterDel)
+            
 
             if (Array.isArray(findBooks) && findBooks.length === 0) {
                 res.status(404).send({ status: false, message: "No Books Found" });
@@ -184,6 +184,7 @@ const getbooks = async function (req, res) {
                 (a, b) => (a.title > b.title && 1) || -1
             );
 
+            console.log(sortedByBookName)
             res
                 .status(200)
                 .send({
@@ -218,6 +219,11 @@ const getBookWithReview = async function (req, res) {
     try {
         const bookId = req.params.bookId;
 
+        if(!isValidObjectId(bookId)){
+            res.status(400).send({status: false, message: "invalid book ID"})
+            return;
+        }
+
         if (!isValid(bookId)) {
             res
                 .status(400)
@@ -233,7 +239,7 @@ const getBookWithReview = async function (req, res) {
         });
         //console.log( bookDetail )
         if (!isValid(bookDetail)) {
-            res.status(404).send({ status: false, msg: `book id not matched in db` });
+            res.status(404).send({ status: false, msg: `invalid book ID` });
             return;
         }
 
