@@ -12,15 +12,15 @@ router.get('/test-me', function (req, res) {
 });
 
 //USER API
-router.post('/registerUser',usercontroller.registerUser)
+router.post('/User',usercontroller.registerUser)
  router.post('/login',usercontroller.login)
 
 
  //BOOK API
  
-router.post('/createbooks',Middleware.Auth,bookcontroller.createbooks) //authorisation
+router.post('/books',Middleware.Auth,bookcontroller.createbooks) //authorisation
 
-router.get('/getbooks',Middleware.Auth,bookcontroller.getbooks)
+router.get('/books',Middleware.Auth,bookcontroller.getbooks)
  router.put('/books/:bookId',Middleware.Auth,bookcontroller.update ) //authorisation
  router.get('/books/:bookId',Middleware.Auth,bookcontroller.getBookWithReview )
 

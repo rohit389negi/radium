@@ -111,8 +111,6 @@ const registerUser = async function (req, res) {
     }
 }
 
-
-
 //POST /login
 const login = async function (req, res) {
     try {
