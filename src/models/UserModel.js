@@ -1,22 +1,6 @@
-
-//User Model UserModel.js
-
 const mongoose = require('mongoose')
 
-const regexphone = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/;
-
-const validatephone = function (phone) {
-    return regexphone.test(phone)
-}
-
-// const regexpincode =  "^[1-9]{1}[0-9]{2}\\s{0, 1}[0-9]{3}$";
-
-// const validatepincode = function(pincode) {
-//     return regexpincode.test(pincode)
-// }
-
 const UserSchema = new mongoose.Schema({
-
 
     title: {
         type: String,
@@ -36,9 +20,6 @@ const UserSchema = new mongoose.Schema({
         trim: true,
         required: 'phone number is required',
         unique: true,
-        validate: {
-            validator: validatephone, message: 'Please fill a valid number', isAsync: false
-        }
     },
 
     email: {
@@ -46,14 +27,7 @@ const UserSchema = new mongoose.Schema({
         required: 'email is required',
         unique: true,
         trim: true,
-        validate: {
-            validator: function (v) {
-                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
-            },
-
-            message: "Please enter a valid email"
-
-        },
+        message: "Please enter a valid email"
     },
 
     password: {
@@ -69,15 +43,23 @@ const UserSchema = new mongoose.Schema({
         city: { type: String },
         pincode: {
             type: String
-            // validate: {
-            //     validator:validatepincode , message: 'Please fill a valid pincoder', isAsync: false
-            // }
         },
 
-
     }
-
-
 }, { timestamps: true })
 
 module.exports = mongoose.model('User', UserSchema)
+
+
+
+    // const regexphone = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/;
+    
+    // const validatephone = function (phone) {
+    //     return regexphone.test(phone)
+    // }
+    
+    // const regexpincode =  "^[1-9]{1}[0-9]{2}\\s{0, 1}[0-9]{3}$";
+    
+    // const validatepincode = function(pincode) {
+    //     return regexpincode.test(pincode)
+    // }
