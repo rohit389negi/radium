@@ -1,22 +1,69 @@
 const mongoose = require('mongoose')
 
 const bookSchema = new mongoose.Schema({
-    name: {
+
+    title: {
         type: String,
-        required: 'Book name is required',
-        trim: true
+        required:'title is required',
+        unique: true,
+        trim:true
     },
-    author: {
+
+    excerpt: {
         type: String,
-        required: 'Author name is required',
-        trim: true
+        required:'excerpt is required',
+        trim:true
     },
+    
+    ISBN: {
+        type: String,
+        required:'ISBN is required',
+        unique: true,
+        trim:true
+    },
+
     category: {
         type: String,
-        required: 'Category is required',
+        required:'category is required',
+        trim:true
+    },
+
+    subcategory: {
+        type:String,
+        required:'subcategory is required',
+        trim:true
+    },
+
+    reviews: {
+        type:Number,
+        default: 0
+    },
+
+    deletedAt: {
+        type: Date,
+        default: null
+    }, 
+
+    isDeleted:{
+        type: Boolean,
+        default: false
+    },
+
+    releasedAt:{
+        type: Date,
+        required:'releasedAt is required'
+    },
+
+    coverLink:{
+        type: String,
+        required: true,
         trim: true
     }
-
 }, { timestamps: true })
 
-module.exports = mongoose.model('Book', bookSchema)
+module.exports = mongoose.model('Bookcover', bookSchema )
+
+    
+
+
+    

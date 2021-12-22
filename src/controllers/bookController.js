@@ -1,56 +1,115 @@
-const bookModel = require('../models/bookModel')
+const BookModel = require("../models/bookModel.js");
+const mongoose = require("mongoose");
 
-
-const isValid = function(value) {
-    if(typeof value === 'undefined' || value === null) return false
-    if(typeof value === 'string' && value.trim().length === 0) return false
+const isValid = function (value) {
+    if (typeof value === "undefined" || value === null) return false;
+    if (typeof value === "string" && value.trim().length === 0) return false;
     return true;
-}
+};
 
-const isValidRequestBody = function(requestBody) {
-    return Object.keys(requestBody).length > 0
-}
+const isValidrequestBody = function (requestBody) {
+    return Object.keys(requestBody).length > 0;
+};
 
-const resourceBook = async function (req, res) {
+const isValidObjectId = function (ObjectId) {
+    return mongoose.Types.ObjectId.isValid(ObjectId);
+};
+
+const createbooks = async function (req, res) {
     try {
         const requestBody = req.body;
-        if(!isValidRequestBody(requestBody)) {
-            res.status(400).send({status: false, message: 'Invalid request parameters. Please provide author details'})
-            return
+
+        if (!isValidrequestBody(requestBody)) {
+            res
+                .status(400)
+                .send({ status: false, message: "request body is not found" });
         }
 
-        // Extract params
-        const {name, author, category} = requestBody; // Object destructing
+        //extract params
+        const {
+            title,
+            excerpt,
+            ISBN,
+            category,
+            subcategory,
+            review,
+            releasedAt,
+            coverLink
+        } = requestBody;
 
-        // Validation starts
-        if(!isValid(name)) {
-            res.status(400).send({status: false, message: 'First name is required'})
-            return
+        if (!isValid(title)) {
+            res.status(400).send({ status: false, message: "title is required" });
+            return;
         }
 
-        if(!isValid(author)) {
-            res.status(400).send({status: false, message: 'Last name is required'})
-            return
+        if (!isValid(excerpt)) {
+            res.status(400).send({ status: false, message: "excerpt required" });
+            return;
+        }
+
+        if (!isValid(category)) {
+            res.status(400).send({ status: false, message: "category required" });
+            return;
+        }
+
+        if (!isValid(subcategory)) {
+            res.status(400).send({ status: false, message: "subcategory required" });
+            return;
+        }
+
+        if (!isValid(releasedAt)) {
+            res.status(400).send({ status: false, message: "releasedAt required" });
+            return;
+        }
+
+        if (!isValid(coverLink)) {
+            res.status(400).send({ status: false, message: "coverLink is required" });
+            return;
         }
 
 
-        if(!isValid(category)) {
-            res.status(400).send({status: false, message: `Category is required`})
-            return
+        const istitleAlreadyUsed = await BookModel.findOne({ title });
+
+        if (istitleAlreadyUsed) {
+            res
+                .status(400)
+                .send({ status: false, message: `${title} title is already exist` });
+            return;
         }
-        
-        // Validation ends
 
-        const bookData = {name, author, category}
-        const newBook = await bookModel.create(bookData);
+        const isISBNAlreadyUsed = await BookModel.findOne({ ISBN });
 
-        res.status(201).send({status: true, message: `Book registered successfully`, data: newBook});
-    } catch (error) {
-        res.status(500).send({status: false, message: error.message});
+        if (isISBNAlreadyUsed) {
+            res
+                .status(400)
+                .send({ status: false, message: `${ISBN} ISBN is already exist` });
+            return;
+        }
+
+        //validation end
+
+        const bookData = {
+            title,
+            excerpt,
+            ISBN,
+            category,
+            subcategory,
+            releasedAt: releasedAt ? releasedAt : "releasedAt field is mandatory",
+            coverLink
+        };
+        let savedbook = await BookModel.create(bookData);
+        res
+            .status(201)
+            .send({
+                status: true,
+                message: "book created succesfully",
+                data: savedbook,
+            });
+    } catch (err) {
+        res.status(500).send({ status: false, message: err.message });
     }
-}
+};
 
-module.exports = {
-    resourceBook
-}
+module.exports.createbooks = createbooks;
+
 
