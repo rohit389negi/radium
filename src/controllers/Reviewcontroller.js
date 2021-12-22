@@ -25,7 +25,12 @@ const bookreview = async function (req, res) {
         const requestBody = req.body
         const bookId = req.params.bookId
 
-        const book = await BookModel.findById({ _id: bookId, isDeleted: false })
+        if(!isValidObjectId(bookId)){
+            res.status(400).send({status: false, message: `${bookId} this is not valid book id please! check`})
+            return
+        }
+
+        const book = await BookModel.findOne({ _id: bookId, isDeleted: false })
 
         if (!book) {
             res.status(404).send({ status: false, message: `book not found` })
@@ -38,6 +43,7 @@ const bookreview = async function (req, res) {
 
         //extract params
         const { reviewedBy, reviews, rating, isDeleted } = requestBody
+
 
         if (!isValid(reviews)) {
             res.status(400).send({ status: false, message: 'reviews required' })
